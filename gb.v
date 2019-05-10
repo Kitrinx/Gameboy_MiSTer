@@ -182,8 +182,8 @@ wire genie_ovr;
 wire [7:0] genie_data;
 
 
-CODES #(.MAX_CODES(8)) codes (
-	.clk        (clk2x),
+CODES codes (
+	.clk        (clk_sys),
 	.reset      (gg_reset),
 	.enable     (~gg),
 	.addr_in    (cpu_addr),
