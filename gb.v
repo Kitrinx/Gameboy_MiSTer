@@ -57,7 +57,9 @@ module gb (
 	output speed,   //GBC
 	
 	input         gg,
-	input  [34:0] gg_code
+	input [128:0] gg_code,
+	input         gg_reset,
+	output        gg_avail
 );
 
 // include cpu
@@ -169,7 +171,7 @@ GBse cpu (
    .A          ( cpu_addr      ),
    .DI         ( genie_ovr ? genie_data : cpu_di),
    .DO         ( cpu_do        ),
-	.STOP       ( cpu_stop      )
+   .STOP       ( cpu_stop      )
 );
 
 // --------------------------------------------------------------------
@@ -180,13 +182,14 @@ wire genie_ovr;
 wire [7:0] genie_data;
 
 
-geniecodes codes (
+CODES #(.MAX_CODES(8)) codes (
 	.clk        (clk2x),
-	.reset      (new_game_load),
+	.reset      (gg_reset),
 	.enable     (~gg),
 	.addr_in    (cpu_addr),
 	.data_in    (cpu_di),
 	.code       (gg_code),
+	.available  (gg_avail),
 	.genie_ovr  (genie_ovr),
 	.genie_data (genie_data)
 );
